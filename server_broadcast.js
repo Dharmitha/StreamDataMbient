@@ -10,7 +10,7 @@ var servidor =  net.createServer(function(client){
  // Adding all client who conect to server to clientList
  client.id = ids++
  clientList.push(client);
- client.write("ndijniunjisui\n");
+ //client.write("ndijniunjisui\n");
  console.log(clientList[ids-1]);
  // Event actived every time a client connect to server
  client.on('connection', function(){
@@ -23,8 +23,43 @@ var servidor =  net.createServer(function(client){
 
   clientList.forEach(function(socket, index, array){
          if(socket != client){
-    		socket.write(data+"\n");
-		console.log('Data sent');
+		var d = String(data)
+		var res = d.split(/[^0-9\.]/);
+		//console.log(res)
+		// create array
+       		var newArray = new Array();
+		
+		for (var i = 0; i < res.length; i++) 					{
+   		 if (res[i]) {
+      			newArray.push(res[i]);
+    			}
+  		}
+		//console.log(newArray.length);
+		//console.log(newArray);
+		
+		if(newArray.length>3)
+		{
+		var multiArray = new Array();
+		for (var i = 0; i < (newArray.length/3); i++) {
+  			multiArray[i] = new Array();
+		}
+		var k=0;
+		  for(i=0;i<(newArray.length/3);i++)
+		   {
+		     for(var j=0;j<3;j++){
+			multiArray[i][j]=newArray[k];
+			k++;
+		   }
+		   }
+		for (i=0;i<(newArray.length/3);i++){
+		  socket.write(multiArray[i]+"\n");
+		  }
+		}
+		else
+		{
+    		//socket.write(data+"\n");
+		socket.write(newArray+"\n");
+		}
          }
 	
          
